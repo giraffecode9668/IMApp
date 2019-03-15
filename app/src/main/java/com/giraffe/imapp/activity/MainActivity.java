@@ -1,42 +1,87 @@
 package com.giraffe.imapp.activity;
 
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.giraffe.imapp.R;
 import com.giraffe.imapp.fragment.ChatsFragment;
 import com.giraffe.imapp.fragment.CommunityFragment;
 import com.giraffe.imapp.fragment.ContactsFragment;
 import com.giraffe.imapp.fragment.SettingFragment;
+import com.giraffe.imapp.url.CircleDrawable;
 import com.giraffe.imapp.url.ViewPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private ViewPager viewPager;
+    private TextView tbtitle;
     private MenuItem menuItem;
     private BottomNavigationViewEx bnve;
     private List<Fragment> list;
-
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tbtitle = findViewById(R.id.AM_toolbar_title);
+
+        //使用toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //头像
+        Resources resources = MainActivity.this.getResources();
+        Drawable drawable = resources.getDrawable(R.drawable.giraffecode);
+        int size = 44;
+        CircleDrawable circleDrawable = new CircleDrawable(drawable, MainActivity.this, size);
+        toolbar.setNavigationIcon(circleDrawable);
+
+        //头像点击事件
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout = findViewById(R.id.AM_drawerlayout);
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+
         bnve = findViewById(R.id.AM_bnve);
         viewPager = findViewById(R.id.AM_viewpager);
         bnve.enableAnimation(true);
         bnve.enableShiftingMode(false);
+        bnve.setIconVisibility(true);
+        bnve.setTextVisibility(true);
+
+
+
+
         bnve.setOnNavigationItemSelectedListener(
                 new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
                     @Override
@@ -74,6 +119,21 @@ public class MainActivity extends AppCompatActivity {
                 }
                 menuItem = bnve.getMenu().getItem(position);
                 menuItem.setChecked(true);
+
+                switch (position){
+                    case 0:
+                        tbtitle.setText("消息");
+                        break;
+                    case 1:
+                        tbtitle.setText("通讯录");
+                        break;
+                    case 2:
+                        tbtitle.setText("发现");
+                        break;
+                    case 3:
+                        tbtitle.setText("设置");
+                        break;
+                }
             }
 
             @Override
@@ -81,7 +141,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                Intent intent;
+                switch (id) {
+                    case R.id.addfriend:
+                        Toast.makeText(MainActivity.this,"添加好友",Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.addcom:
+                        Toast.makeText(MainActivity.this,"添加群聊",Toast.LENGTH_LONG).show();
+                        break;
+
+                }
+                return true;
+            }
+        });
+
         setupViewPager(viewPager);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tb_add, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 解决Toolbar中Menu无法同时显示图标和文字的问题
+     * */
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+                try {
+                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    method.setAccessible(true);
+                    method.invoke(menu, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return super.onMenuOpened(featureId, menu);
     }
 
     private void setupViewPager(ViewPager viewPager) {

@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_contacts2" />
-                            <entry key="sourceFile" value="E:\broserdl\联系人.svg" />
+                            <entry key="outputName" value="ic_addcom" />
+                            <entry key="sourceFile" value="E:\broserdl\群聊.svg" />
                           </map>
                         </option>
                       </PersistentState>
