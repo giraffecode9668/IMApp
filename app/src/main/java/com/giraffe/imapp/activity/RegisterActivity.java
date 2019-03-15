@@ -1,10 +1,8 @@
 package com.giraffe.imapp.activity;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +16,7 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //页面组件初始化
     EditText account,password;
     Button register;
     Intent intent;
@@ -27,13 +26,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //定位组件
         account = findViewById(R.id.RG_et_account);
         password = findViewById(R.id.RG_pw_password);
         register = findViewById(R.id.RG_btn_register);
 
+        //监听注册事件
         register.setOnClickListener(this);
     }
 
+    /**
+     * 点击事件
+     **/
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -48,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * 账号密码注册
+     * 账号密码注册方法
      */
     private void signUp(final View view) {
         final BmobUser user = new BmobUser();
