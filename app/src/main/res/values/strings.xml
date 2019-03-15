@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">IMApp</string>
+    <string name="menu_chats">消息</string>
+    <string name="menu_contacts">通讯录</string>
+    <string name="menu_community">发现</string>
+    <string name="menu_setting">设置</string>
+
+
+
+
+
+
 </resources>
