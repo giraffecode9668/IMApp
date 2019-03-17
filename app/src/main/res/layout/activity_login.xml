@@ -7,6 +7,26 @@
     android:layout_height="match_parent"
     tools:context=".activity.LoginActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/AL_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/toolbar_action_menu_overflow"
+        >
+
+        <TextView
+            android:id="@+id/AL_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:text="登录"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
+
     <EditText
         android:id="@+id/LG_et_account"
         android:layout_width="match_parent"
@@ -14,6 +34,10 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="account"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:textCursorDrawable="@drawable/my_cursor"
         android:inputType="textPersonName" />
 
     <EditText
@@ -22,18 +46,32 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="password"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:textCursorDrawable="@drawable/my_cursor"
         android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/LG_btn_register"
+    <com.dd.morphingbutton.MorphingButton
+        android:id="@+id/LG_mb_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryWhite"
         android:layout_marginTop="40dp"
-        android:text="register an account" />
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:text="@string/Login"/>
 
-    <Button
-        android:id="@+id/LG_btn_login"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/LG_tv_register"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login in" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"
+        android:text="立即注册"/>
+
+
 </LinearLayout>

@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.ChatsFragment">
+    android:orientation="vertical"
+    tools:context=".fragment.ChatsFragment"
+    android:layout_marginTop="?attr/toolbarId">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="0" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <EditText
+            android:id="@+id/FC_ex_local"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:hint="Id"/>
+
+        <EditText
+            android:id="@+id/FC_ex_connect"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:hint="toId"/>
+
+        <Button
+            android:id="@+id/FC_btn_conncet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始连接"/>
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/FC_et_message"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+           />
+
+        <Button
+            android:id="@+id/FC_btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/FC_tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+
+</LinearLayout>

@@ -3,6 +3,7 @@ package com.giraffe.imapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText account,password;
     Button register;
     Intent intent;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +29,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
 
         //定位组件
+        toolbar = findViewById(R.id.AR_toolbar);
         account = findViewById(R.id.RG_et_account);
         password = findViewById(R.id.RG_pw_password);
         register = findViewById(R.id.RG_btn_register);
+
+        //展开toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         //监听注册事件
         register.setOnClickListener(this);

@@ -7,6 +7,26 @@
     android:layout_height="match_parent"
     tools:context=".activity.RegisterActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/AR_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/toolbar_action_menu_overflow"
+        >
+
+        <TextView
+            android:id="@+id/AR_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:text="注册"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
+
     <EditText
         android:id="@+id/RG_et_account"
         android:layout_width="match_parent"
@@ -14,6 +34,9 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="account"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:textCursorDrawable="@drawable/my_cursor"
         android:inputType="textPersonName" />
 
     <EditText
@@ -22,6 +45,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="password"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:textCursorDrawable="@drawable/my_cursor"
         android:inputType="textPassword" />
 
     <Button
@@ -29,7 +55,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="register" />
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryWhite"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:text="注册" />
 
 
 </LinearLayout>
