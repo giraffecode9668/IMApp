@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -30,6 +31,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
 
     //页面组件初始化
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private List<Fragment> list;
     private BottomNavigationViewEx bnve;
+    CircleImageView imageView;
+    NavigationView navigationView;
+    Intent intent;
+
 
     private MenuItem menuItem;
 
@@ -53,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.AM_viewpager);
         tbtitle = findViewById(R.id.AM_toolbar_title);
         drawerLayout = findViewById(R.id.AM_drawerlayout);
-
-
+        navigationView = findViewById(R.id.AM_nv_navigationview);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        imageView = headerLayout.findViewById(R.id.NH_civ_image);
 
 
 
@@ -96,6 +104,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 return true;
+            }
+        });
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this,EditIfmActivity.class);
+                startActivity(intent);
             }
         });
 

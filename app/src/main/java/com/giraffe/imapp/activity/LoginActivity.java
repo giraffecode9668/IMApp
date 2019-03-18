@@ -3,6 +3,7 @@ package com.giraffe.imapp.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.TimerTask;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -65,7 +67,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.LG_mb_login:
                 loginByAccount(v);
                 break;
-
         }
     }
 

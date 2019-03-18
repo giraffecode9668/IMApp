@@ -7,6 +7,7 @@
     android:background="?attr/colorPrimary">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/NH_civ_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:src="@drawable/giraffecode"
@@ -14,22 +15,23 @@
         android:layout_marginTop="35dp"/>
 
     <TextView
-        android:id="@+id/sign"
+        android:id="@+id/NH_tv_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Hello world"
+        android:text="个性签名"
         android:textSize="14sp"
         android:textColor="#FFF"
-        android:layout_marginLeft="12dp"/>
+        android:layout_marginLeft="18dp"/>
 
     <TextView
+        android:id="@+id/NH_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/sign"
-        android:text="Giraffe Code"
+        android:layout_above="@+id/NH_tv_sign"
+        android:text="名称"
         android:textSize="18sp"
         android:textColor="#FFF"
-        android:layout_marginLeft="12dp"/>
+        android:layout_marginLeft="18dp"/>
 
 </RelativeLayout>

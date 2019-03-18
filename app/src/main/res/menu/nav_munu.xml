@@ -2,16 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_call"
-            android:title="Call"/>
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account"
+            android:title="账号"
+
+            android:checkable="false"/>
         <item
-            android:id="@+id/nav_friends"
-            android:title="Friends"/>
+            android:id="@+id/nav_username"
+            android:icon="@drawable/ic_username"
+            android:title="性别"
+            />
         <item
-            android:id="@+id/nav_mail"
-            android:title="Mail"/>
+            android:id="@+id/nav_space"
+            android:icon="@drawable/ic_space"
+            android:title="地址"/>
         <item
-            android:id="@+id/nav_task"
-            android:title="Tasks"/>
+            android:id="@+id/nav_sign"
+            android:icon="@drawable/ic_sign"
+            android:title="我的安排"/>
     </group>
 </menu>
