@@ -28,7 +28,7 @@
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
-        android:id="@+id/rl_Edit_headimage"
+        android:id="@+id/AE_rl_avatar"
         android:layout_width="match_parent"
         android:layout_height="72dp">
 
@@ -43,7 +43,7 @@
             android:textColor="@color/colorPrimary"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_Edit_headimage"
+            android:id="@+id/AE_civ_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/giraffecode"
