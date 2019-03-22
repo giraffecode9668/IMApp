@@ -23,16 +23,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     Intent intent;
     Toolbar toolbar;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
 
         //定位组件
         toolbar = findViewById(R.id.AR_toolbar);
         account = findViewById(R.id.RG_et_account);
         password = findViewById(R.id.RG_pw_password);
         register = findViewById(R.id.RG_btn_register);
+
 
         //展开toolbar
         setSupportActionBar(toolbar);
@@ -43,9 +48,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         register.setOnClickListener(this);
     }
 
-    /**
-     * 点击事件
-     **/
+
+
+     /* ******** */
+     /* 点击事件 */
+     /* ******** */
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -59,9 +66,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    /**
-     * 账号密码注册方法
-     */
+
+
+     /* **************** */
+     /* 账号密码注册方法 */
+     /* **************** */
     private void signUp(final View view) {
         final BmobUser user = new BmobUser();
         user.setUsername(account.getText().toString());
@@ -71,10 +80,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void done(BmobUser user, BmobException e) {
                 if (e == null) {
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "注册成功",
+                            Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "注册失败",
+                            Toast.LENGTH_SHORT).show();
 
                     System.out.print(e.getStackTrace()+"e.getErrorCode()："+e.getErrorCode());
                 }

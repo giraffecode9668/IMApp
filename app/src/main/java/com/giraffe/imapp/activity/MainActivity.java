@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         Resources resources = MainActivity.this.getResources();
         Drawable drawable = resources.getDrawable(R.drawable.giraffecode);
         int size = 44;
-        CircleDrawable circleDrawable = new CircleDrawable(drawable, MainActivity.this, size);
+        CircleDrawable circleDrawable = new CircleDrawable(drawable,
+                MainActivity.this, size);
         toolbar.setNavigationIcon(circleDrawable);
 
         //头像点击，展开左边抽屉
@@ -97,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 switch (id) {
                     case R.id.addfriend:
-                        Toast.makeText(MainActivity.this,"添加好友",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this,
+                                "添加好友",Toast.LENGTH_LONG).show();
                         break;
                     case R.id.addcom:
-                        Toast.makeText(MainActivity.this,"添加群聊",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this,
+                                "添加群聊",Toast.LENGTH_LONG).show();
                         break;
                 }
                 return true;
@@ -116,14 +119,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*  ------------------------------------------------------------------------------------------    */
 
 
 
         /*         *********        */
         /*          底部导航        */
         /*          ********        */
-
         //底部导航：BottomNavigationViewEx的设置
         bnve.enableAnimation(true);
         bnve.enableShiftingMode(false);
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         bnve.setTextVisibility(true);
         //添加fragment页面
         setupViewPager(viewPager);
+
 
         //点击监听
         bnve.setOnNavigationItemSelectedListener(
@@ -158,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
         //页面监听
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
             }
             @Override
             public void onPageSelected(int position) {
@@ -188,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        /*  ------------------------------------------------------------------------------------------    */
+        /*  --------------------------------------------------------------------------------- */
     }
 
     /**
@@ -207,7 +210,8 @@ public class MainActivity extends AppCompatActivity {
         if (menu != null) {
             if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
-                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    Method method = menu.getClass()
+                            .getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
                     method.setAccessible(true);
                     method.invoke(menu, true);
                 } catch (Exception e) {

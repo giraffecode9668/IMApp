@@ -3,7 +3,6 @@ package com.giraffe.imapp.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,7 +19,6 @@ import java.util.TimerTask;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,9 +51,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
     }
 
-    /**
-     * 点击事件
-     **/
+
+
+    /* ******** */
+    /* 点击事件 */
+    /* ******** */
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -72,11 +72,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-    /**
-     * 账号密码登录
-     */
+     /* ************ */
+     /* 账号密码登录 */
+    /* ************ */
     private void loginByAccount(View view) {
-        BmobUser.loginByAccount(account.getText()+"", password.getText()+"", new LogInListener<BmobUser>() {
+        BmobUser.loginByAccount(account.getText()+"",
+                password.getText()+"", new LogInListener<BmobUser>() {
             @Override
             public void done(BmobUser user, BmobException e) {
                 if (e == null) {
@@ -88,7 +89,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
                         public void run() {
-                            intent = new Intent(LoginActivity.this,MainActivity.class);
+                            intent = new Intent(LoginActivity.this,
+                                    MainActivity.class);
                             startActivity(intent);
                             finish();
                             this.cancel();
@@ -108,7 +110,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }, 1500);// 这里百毫秒
 
-                    Toast.makeText(LoginActivity.this, "密码或用户错误，请重新输入", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,
+                            "密码或用户错误，请重新输入", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -116,9 +119,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-    /**
-     * 按钮点击后的图形
-     **/
+    /* **************** */
+    /* 按钮点击后的图形 */
+    /* **************** */
     private MorphingButton.Params createParams(int icon){
         MorphingButton.Params btn_clicked = MorphingButton.Params.create()
                 .duration(800)
@@ -133,9 +136,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-    /**
-     * 刷新当前页面
-     **/
+    /* ************ */
+    /* 刷新当前页面 */
+    /* ************ */
     public static void restartActivity(Activity activity){
         Intent intent = new Intent();
         intent.setClass(activity, activity.getClass());
