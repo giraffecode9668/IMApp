@@ -42,8 +42,11 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -66,6 +69,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     private Toolbar toolbar;
     private RelativeLayout rl_avatar;
     private String avatarPath;//上传图片的filepath
+    private String s_avatarPath;//缩略图的filepath
     private Uri imageUri;//拍照的图片保存uri:包括名称
     private CircleImageView civ_avatar;
     private TextView tv_username,tv_sex;
@@ -100,8 +104,8 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
 
         if (BmobUser.getCurrentUser(User.class).getAvatar() != null){
             Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
-                error(R.mipmap.ic_launcher).thumbnail(0.1f).
-                into(civ_avatar);
+                error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
+                    dontAnimate().into(civ_avatar);
         }
         tv_username.setText(BmobUser.getCurrentUser(User.class).getUsername());
         et_nickname.setText(BmobUser.getCurrentUser(User.class).getNickname());
@@ -136,7 +140,9 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
 
                         if(isAvatar){
                             //上传图片
-                            final BmobFile bmobFile = new BmobFile(new File(avatarPath));//创建上传的文件
+//                            final BmobFile bmobFile = new BmobFile(new File(avatarPath));//创建上传的文件
+                            getFile(getBytes(avatarPath));
+                            final BmobFile bmobFile = new BmobFile(new File(s_avatarPath));//创建上传的文件
                             bmobFile.uploadblock(new UploadFileListener() {//上传图片
 
                                 @Override
@@ -480,6 +486,87 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(this,"You denied the permission",
                             Toast.LENGTH_LONG).show();
                 }
+        }
+    }
+
+
+
+    private byte[] getBytes(String path) {
+        //File file = new File(path);
+        //读取图片 只读边,不读内容
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        newOpts.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, newOpts);
+        //开始按比例缩放图片
+        newOpts.inJustDecodeBounds = false;
+        int width = newOpts.outWidth;
+        int height = newOpts.outHeight;
+        float maxSize = 1200;
+        int be = 1;
+        if (width >= height && width > maxSize) {//缩放比,用高或者宽其中较大的一个数据进行计算
+            be = (int) (newOpts.outWidth / maxSize);
+            be++;
+        } else if (width < height && height > maxSize) {
+            be = (int) (newOpts.outHeight / maxSize);
+            be++;
+        }
+        newOpts.inSampleSize = be;//设置采样率
+        newOpts.inPreferredConfig = Bitmap.Config.ARGB_8888;//该模式是默认的,可不设
+        newOpts.inPurgeable = true;// 同时设置才会有效
+        newOpts.inInputShareable = true;//。当系统内存不够时候图片自动被回收
+        //下面可是图片压缩
+        Bitmap bitmap = BitmapFactory.decodeFile(path, newOpts);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int options = 100;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//质量压缩方法，把压缩后的数据存放到baos中 (100表示不压缩，0表示压缩到最小)
+        while (baos.toByteArray().length > 100 * 1024) {//循环判断如果压缩后图片是否大于指定大小,大于继续压缩
+            baos.reset();//重置baos即让下一次的写入覆盖之前的内容
+            options -= 5;//图片质量每次减少5
+            if (options <= 5) options = 5;//如果图片质量小于5，为保证压缩后的图片质量，图片最底压缩质量为5
+            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//将压缩后的图片保存到baos中
+            if (options == 5) break;//如果图片的质量已降到最低则，不再进行压缩
+        }
+        return baos.toByteArray();
+    }
+
+
+    /**
+     * 根据byte数组，生成文件
+     */
+    public void getFile(byte[] bfile) {
+        BufferedOutputStream bos = null;
+        FileOutputStream fos = null;
+
+        File file = null;
+        try {
+            file = new File(getExternalCacheDir(),"s_avatar.JPEG");
+            if (file.exists()){
+                file.delete();
+            }
+            file.createNewFile();
+            s_avatarPath = file.getPath();
+            Log.d("s_avatar:",s_avatarPath);
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            bos.write(bfile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (fos != null){
+                try {
+                    fos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 

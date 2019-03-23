@@ -242,11 +242,11 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
         //填充头像内容
         if (BmobUser.getCurrentUser(User.class).getAvatar()!=null){//头像
             Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
-                    error(R.mipmap.ic_launcher).thumbnail(0.1f).
-                    into(civ_avatar);
+                    error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
+                    dontAnimate().into(civ_avatar);
             Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
-                    error(R.mipmap.ic_launcher).thumbnail(0.1f).
-                    into(civ_mavatar);
+                    error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
+                    dontAnimate().into(civ_mavatar);
         }
 
         //填充个人信息
