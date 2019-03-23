@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,20 +16,27 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.giraffe.imapp.R;
+import com.giraffe.imapp.pojo.User;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
@@ -37,8 +45,15 @@ import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditIfmActivity extends AppCompatActivity implements View.OnClickListener {
@@ -50,9 +65,15 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
 
     private Toolbar toolbar;
     private RelativeLayout rl_avatar;
+    private String avatarPath;//上传图片的filepath
     private Uri imageUri;//拍照的图片保存uri:包括名称
     private CircleImageView civ_avatar;
-    private List<Uri> mSelected;//相册选择的图像路径，其中mSelected.get(0)为单选图片的路径
+    private TextView tv_username,tv_sex;
+    private EditText et_nickname,et_space,et_sign,et_mood;
+
+    boolean isAvatar,isNickName,isSex,isSpace,isSign,isMood;
+
+    private int int_sex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +83,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+
     private void initView() {
         setContentView(R.layout.activity_edit_ifm);
         setSupportActionBar(toolbar);
@@ -69,6 +91,24 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
         toolbar = findViewById(R.id.AE_tb_toolbar);//导航栏
         rl_avatar = findViewById(R.id.AE_rl_avatar);//头像行
         civ_avatar = findViewById(R.id.AE_civ_avatar);//头像组件
+        tv_username = findViewById(R.id.AE_tv_username);//用户名（账号）
+        tv_sex = findViewById(R.id.AE_tv_sex);//性别
+        et_nickname = findViewById(R.id.AE_et_nickname);//昵称
+        et_space = findViewById(R.id.AE_et_space);//地址
+        et_sign = findViewById(R.id.AE_et_sign);//个性签名
+        et_mood = findViewById(R.id.AE_et_mood);//心情
+
+        if (BmobUser.getCurrentUser(User.class).getAvatar() != null){
+            Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
+                error(R.mipmap.ic_launcher).thumbnail(0.1f).
+                into(civ_avatar);
+        }
+        tv_username.setText(BmobUser.getCurrentUser(User.class).getUsername());
+        et_nickname.setText(BmobUser.getCurrentUser(User.class).getNickname());
+        tv_sex.setText(BmobUser.getCurrentUser(User.class).getSex());
+        et_space.setText(BmobUser.getCurrentUser(User.class).getSpace());
+        et_sign.setText(BmobUser.getCurrentUser(User.class).getSign());
+        et_mood.setText(BmobUser.getCurrentUser(User.class).getMood());
 
         toolbar.inflateMenu(R.menu.edit_ifm_menu);//加载菜单按钮
     }
@@ -77,14 +117,105 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initListener() {
         rl_avatar.setOnClickListener(this);//头像行点击
+        tv_sex.setOnClickListener(this);
+        isEditTextChangeListener();
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {//点击保存修改信息
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.AE_it_alter:
-                        Toast.makeText(EditIfmActivity.this,"alter",
-                                Toast.LENGTH_LONG).show();
+                        final Intent intent = new Intent(EditIfmActivity.this,MainActivity.class);
+                        final User user = BmobUser.getCurrentUser(User.class);
+
+                        if (isNickName) user.setNickname(et_nickname.getText().toString());
+                        if (isSex) user.setSex(int_sex);
+                        if (isSpace) user.setSpace(et_space.getText().toString());
+                        if (isSign) user.setSign(et_sign.getText().toString());
+                        if (isMood) user.setMood(et_mood.getText().toString());
+
+                        if(isAvatar){
+                            //上传图片
+                            final BmobFile bmobFile = new BmobFile(new File(avatarPath));//创建上传的文件
+                            bmobFile.uploadblock(new UploadFileListener() {//上传图片
+
+                                @Override
+                                public void done(BmobException e) {
+                                    if(e==null){
+                                        //bmobFile.getFileUrl()--返回的上传文件的完整地址
+                                        Log.d("上传文件成功" ,bmobFile.getFileUrl());
+
+                                        user.setAvatar(bmobFile);
+                                        user.update(new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e==null){
+                                                    Log.d("图更新","更新图片以及修改信息到表格");
+                                                    Toast.makeText(EditIfmActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
+                                                    goBackMain();
+
+                                                }else {
+                                                    Log.d("图更新","错误："+e.getMessage());
+                                                    Toast.makeText(EditIfmActivity.this,"更新失败",Toast.LENGTH_SHORT).show();
+                                                    goBackMain();
+
+                                                }
+                                            }
+                                        });
+                                        isAvatar = false;
+                                    }else{
+                                        Log.d("上传文件失败：" , e.getMessage());
+                                        Toast.makeText(EditIfmActivity.this,"上传图片失败",Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+
+                                @Override
+                                public void onProgress(Integer value) {
+                                    // 返回的上传进度（百分比）
+                                }
+                            });
+                        }else if(isNickName||isSex||isSpace||isSign||isMood) {
+                                user.update(new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null){
+                                            Log.d("任意ET","更新修改的editText成功");
+                                            Toast.makeText(EditIfmActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
+                                            goBackMain();
+
+
+                                        }else {
+                                            Log.d("任意ET","更新修改的editText失败："+e.getMessage());
+                                            Toast.makeText(EditIfmActivity.this,"更新失败",Toast.LENGTH_SHORT).show();
+                                            goBackMain();
+
+
+                                        }
+                                    }
+                                });
+                                isNickName = false;
+                                isSex = false;
+                                isSpace = false;
+                                isSign = false;
+                                isMood = false;
+                        }else {
+                            Toast.makeText(EditIfmActivity.this,"无更改",Toast.LENGTH_SHORT).show();
+                            goBackMain();
+
+                        }
+                        BmobUser.fetchUserInfo(new FetchUserInfoListener<BmobUser>() {//更新用户缓存信息
+                            @Override
+                            public void done(BmobUser user, BmobException e) {
+                                if (e == null) {
+                                    final User myUser = BmobUser.getCurrentUser(User.class);
+                                    Log.d("BmobUser", "更新用户本地缓存信息成功："+myUser.getUsername()+"-"+myUser.getNickname());
+                                } else {
+                                    Log.e("error",e.getMessage());
+                                    Log.d("BmobUser", "更新用户本地缓存信息失败：" + e.getMessage());
+                                }
+                            }
+                        });
                         break;
                 }
                 return true;
@@ -94,6 +225,61 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
+    /* ******************** */
+    /* 检查EditText是否修改 */
+    /* ******************** */
+    private void isEditTextChangeListener() {
+        et_nickname.addTextChangedListener(new TextWatcher() {//昵称是否修改
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                isNickName = true;
+            }
+        });
+        et_space.addTextChangedListener(new TextWatcher() {//地址是否修改
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                isSpace = true;
+            }
+        });
+        et_sign.addTextChangedListener(new TextWatcher() {//个性签名是否修改
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                isSign = true;
+            }
+        });
+        et_mood.addTextChangedListener(new TextWatcher() {//心情表是否修改
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                isMood = true;
+            }
+        });
+    }
+
+
     /* ******** */
     /* 点击事件 */
     /* ******** */
@@ -101,8 +287,11 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.AE_rl_avatar:
-                openDialog();//打开弹窗选择:照相/打开相册
+                openAvatarDialog();//打开弹窗选择:照相/打开相册
                 break;
+            case R.id.AE_tv_sex:
+                openSexDialog();
+
         }
     }
 
@@ -111,7 +300,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     /* ************** */
     /* 拍照、相册弹窗 */
     /* ************** */
-    private void openDialog() {
+    private void openAvatarDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         final String[] items = {"拍照","打开相册"};
         dialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -148,8 +337,28 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-    /* ********************************************************** */
-     /* 系统自带拍照，此处不用，因为图片选择器中已经集成了拍照功能 */
+    /* ************ */
+    /* 选择性别弹窗 */
+    /* ************ */
+    private void openSexDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请选择");
+        final String[] it_sex = {"未知","男","女"};
+        builder.setItems(it_sex, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tv_sex.setText(it_sex[which]);
+                isSex = true;//修改了性别
+                int_sex = which;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+     /* ********************************************************** */
+     /* 系统自带拍照，因为图片选择器中集成的拍照功能不能自定义路径 */
      /* ********************************************************** */
     private void takePhote(){
         File outputImage = new File(getExternalCacheDir(),"avatar.jpg");//文件存储在Cache中
@@ -158,6 +367,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                 outputImage.delete();
             }
             outputImage.createNewFile();
+            avatarPath = outputImage.getPath();//获得该路径下的图片
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -201,13 +411,15 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode){
-            case REQUEST_CODE_PHOTO://自写的系统自带拍照，此处不用，因为使用的图片选择器集成有拍照功能
+            case REQUEST_CODE_PHOTO://自写的系统自带拍照，因为使用的图片选择器集成的拍照功能不能自定义路径
                 if (resultCode == RESULT_OK){
                     try{
                         //将拍摄的照片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream
                                 (getContentResolver().openInputStream(imageUri));
                         civ_avatar.setImageBitmap(bitmap);
+                        isAvatar = true;//修改了头像
+
                     }catch (FileNotFoundException e){
                         e.printStackTrace();
                     }
@@ -215,13 +427,19 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case REQUEST_CODE_CHOOSE:
                     if(data!=null){
-                        mSelected = Matisse.obtainResult(data);
+                        //相册选择的图像路径，其中mSelected.get(0)为单选图片的路径
+                        List<String> strings = Matisse.obtainPathResult(data);
+                        //相册选择的图像Uri，其中mSelected.get(0)为单选图片的Uri
+                        List<Uri> mSelected = Matisse.obtainResult(data);
+
                         if (mSelected.get(0) != null){
                             try{
                                 Bitmap bitmap = BitmapFactory.decodeStream
                                         (getContentResolver().openInputStream(mSelected.get(0)));
                                 civ_avatar.setImageBitmap(bitmap);
-                                Log.d("tag",bitmap.getWidth()+"//"+bitmap.getHeight());
+                                isAvatar = true;//修改了头像
+                                avatarPath = strings.get(0);
+
                             }catch (IOException e){
                                 e.printStackTrace();
                             }
@@ -230,6 +448,15 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                 }
         }
 
+
+    /* ********** */
+    /* 返回主界面 */
+    /* ********** */
+    private void goBackMain(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     /* ************ */
     /* 权限获取请求 */

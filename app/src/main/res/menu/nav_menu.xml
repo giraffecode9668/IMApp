@@ -5,10 +5,9 @@
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_account"
             android:title="账号"
-
             android:checkable="false"/>
         <item
-            android:id="@+id/nav_username"
+            android:id="@+id/nav_sex"
             android:icon="@drawable/ic_username"
             android:title="性别"
             />
@@ -17,8 +16,8 @@
             android:icon="@drawable/ic_space"
             android:title="地址"/>
         <item
-            android:id="@+id/nav_sign"
+            android:id="@+id/nav_mood"
             android:icon="@drawable/ic_sign"
-            android:title="我的安排"/>
+            android:title="心情"/>
     </group>
 </menu>

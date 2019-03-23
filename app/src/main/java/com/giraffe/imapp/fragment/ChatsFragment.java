@@ -89,7 +89,7 @@ public class ChatsFragment extends Fragment implements View.OnClickListener{
             if (!isOpenConversation){
                 BmobIMUserInfo info =new BmobIMUserInfo();
 
-                info.setAvatar(user.getAvatar());
+//                info.setAvatar(user.getAvatar());
                 info.setUserId(user.getObjectId());
                 info.setName(user.getUsername());
 

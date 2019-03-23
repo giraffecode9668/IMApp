@@ -11,11 +11,11 @@
 
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/AE_tb_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:popupTheme="@style/toolbar_action_menu_overflow">
+        android:background="@color/colorPrimary">
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,13 +46,10 @@
             android:id="@+id/AE_civ_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/giraffecode"
-            android:layout_marginLeft="121dp"
             android:layout_centerVertical="true"
-            app:civ_border_color="@color/colorPrimary"
-            app:civ_border_overlay="true"
-            app:civ_border_width="1dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginLeft="121dp"
+            android:layout_marginRight="16dp"
+            android:src="@mipmap/ic_launcher" />
 
     </RelativeLayout>
 
@@ -83,13 +80,13 @@
 
 
             <TextView
+                android:id="@+id/AE_tv_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="121dp"
                 android:text="9668"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -112,22 +109,21 @@
 
 
             <EditText
+                android:id="@+id/AE_et_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="121dp"
                 android:background="@null"
-                android:textCursorDrawable="@drawable/my_cursor"
+                android:focusedByDefault="false"
                 android:hint="昵称"
                 android:text="giraffecode"
-                android:focusedByDefault="false"
-                android:textSize="16sp"
-                />
+                android:textCursorDrawable="@drawable/my_cursor"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_Edit_sex"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="?android:attr/selectableItemBackground">
@@ -142,13 +138,15 @@
                 android:textSize="16sp"
                 android:textColor="@color/colorPrimary"/>
 
-            <EditText
+            <TextView
+                android:id="@+id/AE_tv_sex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="121dp"
                 android:background="@null"
                 android:textCursorDrawable="@drawable/my_cursor"
+                android:textColor="@color/colorblack"
                 android:hint="性别"
                 android:text="男"
                 android:textSize="16sp" />
@@ -172,6 +170,7 @@
                 android:textColor="@color/colorPrimary"/>
 
             <EditText
+                android:id="@+id/AE_et_space"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -201,6 +200,7 @@
                 android:textColor="@color/colorPrimary"/>
 
             <EditText
+                android:id="@+id/AE_et_sign"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -231,6 +231,7 @@
                 android:textColor="@color/colorPrimary"/>
 
             <EditText
+                android:id="@+id/AE_et_mood"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

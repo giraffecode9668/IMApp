@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         //定位组件
         toolbar = findViewById(R.id.AL_toolbar);
@@ -144,7 +146,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         intent.setClass(activity, activity.getClass());
         activity.startActivity(intent);
         activity.overridePendingTransition(0,0);
-        activity.finish();
     }
 
 

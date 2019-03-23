@@ -5,11 +5,6 @@
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorblack">#0f0f0f</color>
     <color name="colorAccent">#008577</color>
-    <color name="colorRegister">#5FBD8F</color>
-    <color name="colorError">#FF4444</color>
-    <color name="colorComplete">#99CC00</color>
-    <color name="colorUpload">#0099CC</color>
     <color name="colorgrey">#F0F0F0</color>
-    <color name="selector_item_color">#2474DD</color>
     <color name="mb_blue">#008577</color>
 </resources>
