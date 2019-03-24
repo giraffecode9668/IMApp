@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.dd.morphingbutton.MorphingButton;
 import com.giraffe.imapp.R;
+import com.giraffe.imapp.pojo.User;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,8 +35,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        isLogined();
+        initView();
+        initListener();
 
+    }
+
+    private void isLogined() {
+        if (BmobUser.getCurrentUser(User.class)!=null){
+            intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+
+    private void initView() {
+        setContentView(R.layout.activity_login);
 
         //定位组件
         toolbar = findViewById(R.id.AL_toolbar);
@@ -47,7 +63,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //展示toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
 
+
+
+    private void initListener() {
         //注册事件
         register.setOnClickListener(this);
         login.setOnClickListener(this);
@@ -67,7 +87,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(this,"注册账号",Toast.LENGTH_LONG).show();
                 break;
             case R.id.LG_mb_login:
-                loginByAccount(v);
+                if (account.getText().toString().equals("")||password.getText().toString().equals("")){
+                    Toast.makeText(this,"请补全账号和密码",Toast.LENGTH_SHORT).show();
+                }else {
+                    loginByAccount(v);
+
+                }
                 break;
         }
     }
@@ -99,21 +124,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }, 900);// 这里百毫秒
                 } else {
+                    Log.d("false:",e.getErrorCode()+" Message:"+e.getMessage());
 
                     //按钮变化
                     login.morph(createParams(R.drawable.ic_false));
 
-                    // 延迟作用，动画效果
-                    Timer timer = new Timer();// 实例化Timer类
-                    timer.schedule(new TimerTask() {
-                        public void run() {
-                            restartActivity(LoginActivity.this);
-                            this.cancel();
-                        }
-                    }, 1500);// 这里百毫秒
+                    if (e.getErrorCode()==9015){
+                        Toast.makeText(LoginActivity.this,"网络连接失败",Toast.LENGTH_SHORT).show();
+                    }else if (e.getErrorCode()==101){
 
-                    Toast.makeText(LoginActivity.this,
-                            "密码或用户错误，请重新输入", Toast.LENGTH_SHORT).show();
+//                        // 延迟作用，动画效果
+//                        Timer timer = new Timer();// 实例化Timer类
+//                        timer.schedule(new TimerTask() {
+//                            public void run() {
+//                                restartActivity(LoginActivity.this);
+//                                this.cancel();
+//                            }
+//                        }, 1500);// 这里百毫秒
+
+                        Toast.makeText(LoginActivity.this,
+                                "密码或用户错误，请重新输入", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
             }
         });

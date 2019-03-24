@@ -129,7 +129,8 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.AE_it_alter:
-                        final Intent intent = new Intent(EditIfmActivity.this,MainActivity.class);
+                        final Intent intent = new Intent(EditIfmActivity.this,
+                                MainActivity.class);
                         final User user = BmobUser.getCurrentUser(User.class);
 
                         if (isNickName) user.setNickname(et_nickname.getText().toString());
@@ -156,13 +157,17 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e==null){
-                                                    Log.d("图更新","更新图片以及修改信息到表格");
-                                                    Toast.makeText(EditIfmActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
+                                                    Log.d("图更新",
+                                                            "更新图片以及修改信息到表格");
+                                                    Toast.makeText(EditIfmActivity.this,
+                                                            "更新成功",Toast.LENGTH_SHORT).show();
                                                     goBackMain();
 
                                                 }else {
-                                                    Log.d("图更新","错误："+e.getMessage());
-                                                    Toast.makeText(EditIfmActivity.this,"更新失败",Toast.LENGTH_SHORT).show();
+                                                    Log.d("图更新",
+                                                            "错误："+e.getMessage());
+                                                    Toast.makeText(EditIfmActivity.this,
+                                                            "更新失败",Toast.LENGTH_SHORT).show();
                                                     goBackMain();
 
                                                 }
@@ -171,7 +176,8 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                                         isAvatar = false;
                                     }else{
                                         Log.d("上传文件失败：" , e.getMessage());
-                                        Toast.makeText(EditIfmActivity.this,"上传图片失败",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditIfmActivity.this,
+                                                "上传图片失败",Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
@@ -187,15 +193,17 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                                     public void done(BmobException e) {
                                         if (e == null){
                                             Log.d("任意ET","更新修改的editText成功");
-                                            Toast.makeText(EditIfmActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(EditIfmActivity.this,
+                                                    "更新成功",Toast.LENGTH_SHORT).show();
                                             goBackMain();
 
 
                                         }else {
-                                            Log.d("任意ET","更新修改的editText失败："+e.getMessage());
-                                            Toast.makeText(EditIfmActivity.this,"更新失败",Toast.LENGTH_SHORT).show();
+                                            Log.d("任意ET",
+                                                    "更新修改的editText失败："+e.getMessage());
+                                            Toast.makeText(EditIfmActivity.this,
+                                                    "更新失败",Toast.LENGTH_SHORT).show();
                                             goBackMain();
-
 
                                         }
                                     }
@@ -206,7 +214,8 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                                 isSign = false;
                                 isMood = false;
                         }else {
-                            Toast.makeText(EditIfmActivity.this,"无更改",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditIfmActivity.this,
+                                    "无更改",Toast.LENGTH_SHORT).show();
                             goBackMain();
 
                         }
@@ -215,7 +224,8 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                             public void done(BmobUser user, BmobException e) {
                                 if (e == null) {
                                     final User myUser = BmobUser.getCurrentUser(User.class);
-                                    Log.d("BmobUser", "更新用户本地缓存信息成功："+myUser.getUsername()+"-"+myUser.getNickname());
+                                    Log.d("BmobUser",
+                                            "更新用户本地缓存信息成功："+myUser.getUsername()+"-"+myUser.getNickname());
                                 } else {
                                     Log.e("error",e.getMessage());
                                     Log.d("BmobUser", "更新用户本地缓存信息失败：" + e.getMessage());
@@ -363,6 +373,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+
      /* ********************************************************** */
      /* 系统自带拍照，因为图片选择器中集成的拍照功能不能自定义路径 */
      /* ********************************************************** */
@@ -455,6 +466,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
         }
 
 
+
     /* ********** */
     /* 返回主界面 */
     /* ********** */
@@ -463,6 +475,8 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
         startActivity(intent);
         finish();
     }
+
+
 
     /* ************ */
     /* 权限获取请求 */
@@ -490,7 +504,7 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
+    //将path图片转换成压缩的byte[]
     private byte[] getBytes(String path) {
         //File file = new File(path);
         //读取图片 只读边,不读内容
@@ -530,9 +544,9 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    /**
-     * 根据byte数组，生成文件
-     */
+     /* ********************** */
+     /* 根据byte数组，生成文件 */
+     /* ********************** */
     public void getFile(byte[] bfile) {
         BufferedOutputStream bos = null;
         FileOutputStream fos = null;

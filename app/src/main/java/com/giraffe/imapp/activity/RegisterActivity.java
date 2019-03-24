@@ -25,8 +25,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     Toolbar toolbar;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +55,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.RG_btn_register:
-                intent = new Intent(this,LoginActivity.class);
-                signUp(v);
-                startActivity(intent);
+                if(account.getText().toString().equals("")||password.getText().toString().equals("")){
+                    Toast.makeText(RegisterActivity.this,"请完善账号密码",Toast.LENGTH_SHORT).show();
+                }else {
+                    intent = new Intent(this,LoginActivity.class);
+                    signUp(v);
+                    startActivity(intent);
+                }
                 break;
         }
     }

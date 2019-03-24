@@ -2,6 +2,7 @@ package com.giraffe.imapp.pojo;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobRelation;
 
 public class User extends BmobUser {
     private BmobFile avatar;
@@ -9,6 +10,10 @@ public class User extends BmobUser {
     private int sex;
     private String space;
     private String sign;
+
+
+
+    private BmobRelation friends;
 
 
     private String mood;
@@ -73,5 +78,13 @@ public class User extends BmobUser {
 
     public void setAvatar(BmobFile avatar) {
         this.avatar = avatar;
+    }
+
+    public BmobRelation getFriends() {
+        return friends;
+    }
+
+    public void setFriends(BmobRelation friends) {
+        this.friends = friends;
     }
 }

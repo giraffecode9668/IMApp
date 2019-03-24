@@ -1,12 +1,7 @@
 package com.giraffe.imapp.activity;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -23,14 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.giraffe.imapp.R;
 import com.giraffe.imapp.fragment.ChatsFragment;
 import com.giraffe.imapp.fragment.CommunityFragment;
-import com.giraffe.imapp.fragment.ContactsFragment;
+import com.giraffe.imapp.fragment.FriendsFragment;
 import com.giraffe.imapp.fragment.SettingFragment;
 import com.giraffe.imapp.pojo.User;
-import com.giraffe.imapp.url.CircleDrawable;
 import com.giraffe.imapp.url.ViewPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -43,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
 
-    private Boolean up = false;
+    Boolean up = false;
     private Toolbar toolbar;//导航条
     private TextView tbtitle;//tbtitle:导航标题
     private CircleImageView civ_mavatar;//主页面的头像
@@ -52,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     private CircleImageView civ_avatar;//左拉窗中的头像
     private TextView tv_nickname,tv_sign;//tv_nickname:左拉窗昵称；tv_sign:左拉窗个性签名
     private MenuItem it_username,it_sex,it_space,it_mood;//左拉窗菜单项
+    private TextView tv_exit;//退出
     private MenuItem menuItem;//menuItem底部导航的子项
     private BottomNavigationViewEx bnve;//底部导航
     private ViewPager viewPager;
@@ -107,17 +101,17 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
         it_sex = nav_menu.findItem(R.id.nav_sex);
         it_space = nav_menu.findItem(R.id.nav_space);
         it_mood = nav_menu.findItem(R.id.nav_mood);
+        tv_exit = findViewById(R.id.AM_tv_exit);
 
         bnve = findViewById(R.id.AM_bnve);//底部导航
         viewPager = findViewById(R.id.AM_viewpager);
-
 
 
         //支持使用toolbar，将title隐藏，因为使用的是自己写的textview设置居中效果
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
+        //头像点击打开拉窗
         civ_mavatar.setOnClickListener(new View.OnClickListener() {//头像点击打开左边弹窗
             @Override
             public void onClick(View v) {
@@ -143,7 +137,15 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
         it_username.setOnMenuItemClickListener(this);
         it_space.setOnMenuItemClickListener(this);
         it_sex.setOnMenuItemClickListener(this);
-
+        tv_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BmobUser.logOut();
+                intent = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
         //点开导航栏右边，展开工具
@@ -237,32 +239,48 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
     }
 
+
+    /* ******************** */
+    /* 加载个人信息相关资料 */
+    /* ******************** */
     private void initUserIfm(){
 
-        //填充头像内容
-        if (BmobUser.getCurrentUser(User.class).getAvatar()!=null){//头像
-            Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
-                    error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
-                    dontAnimate().into(civ_avatar);
-            Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
-                    error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
-                    dontAnimate().into(civ_mavatar);
+        if (BmobUser.getCurrentUser(User.class)==null){
+            Toast.makeText(this,"用户未登陆",Toast.LENGTH_SHORT).show();
+        }else{
+            //填充头像内容
+            if (BmobUser.getCurrentUser(User.class).getAvatar()!=null){//头像
+                Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
+                        error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
+                        dontAnimate().into(civ_avatar);
+                Glide.with(this).load(BmobUser.getCurrentUser(User.class).getAvatar().getUrl()).
+                        error(R.mipmap.ic_launcher).thumbnail(0.1f).placeholder(R.mipmap.ic_launcher).
+                        dontAnimate().into(civ_mavatar);
+            }
+
+            //填充个人信息
+            tv_nickname.setText(BmobUser.getCurrentUser(User.class).getNickname()==null||
+                    BmobUser.getCurrentUser(User.class).getNickname().equals("")?
+                    "未命名":BmobUser.getCurrentUser(User.class).getNickname());//昵称
+            tv_sign.setText(BmobUser.getCurrentUser(User.class).getSign()==null||
+                    BmobUser.getCurrentUser(User.class).getSign().equals("")?
+                    "这个人很懒，没有签名":BmobUser.getCurrentUser(User.class).getSign());//个性签名
+
+            it_username.setTitle(BmobUser.getCurrentUser(User.class).getUsername());//账号
+            it_sex.setTitle(BmobUser.getCurrentUser(User.class).getSex()==null||
+                    BmobUser.getCurrentUser(User.class).getSex().equals("")?
+                    "未设置": BmobUser.getCurrentUser(User.class).getSex());//性别
+            it_space.setTitle(BmobUser.getCurrentUser(User.class).getSpace()==null||
+                    BmobUser.getCurrentUser(User.class).getSpace().equals("")?
+                    "未设置":BmobUser.getCurrentUser(User.class).getSpace());//地址
+            it_mood.setTitle(BmobUser.getCurrentUser(User.class).getMood()==null||
+                    BmobUser.getCurrentUser(User.class).getMood().equals("")?
+                    "未设置":BmobUser.getCurrentUser(User.class).getMood());//心情
+
         }
 
-        //填充个人信息
-        tv_nickname.setText(BmobUser.getCurrentUser(User.class).getNickname()==null?
-                "未命名":BmobUser.getCurrentUser(User.class).getNickname());//昵称
-        tv_sign.setText(BmobUser.getCurrentUser(User.class).getSign()==null?
-                "这个人很懒，没有签名":BmobUser.getCurrentUser(User.class).getSign());//个性签名
-
-        it_username.setTitle(BmobUser.getCurrentUser(User.class).getUsername());//账号
-        it_sex.setTitle(BmobUser.getCurrentUser(User.class).getSex()==null?
-                "未设置": BmobUser.getCurrentUser(User.class).getSex());//性别
-        it_space.setTitle(BmobUser.getCurrentUser(User.class).getSpace()==null?
-                "未设置":BmobUser.getCurrentUser(User.class).getSpace());//地址
-        it_mood.setTitle(BmobUser.getCurrentUser(User.class).getMood()==null?
-                "未设置":BmobUser.getCurrentUser(User.class).getMood());//心情
     }
+
 
 
      /* ********************************************* */
@@ -303,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     private void setupViewPager(ViewPager viewPager) {
         list = new ArrayList<>();
         list.add(new ChatsFragment());
-        list.add(new ContactsFragment());
+        list.add(new FriendsFragment());
         list.add(new CommunityFragment());
         list.add(new SettingFragment());
 
