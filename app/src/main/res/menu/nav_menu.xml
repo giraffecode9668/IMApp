@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_account"
-            android:icon="@drawable/ic_account"
-            android:title="账号"
-            android:checkable="false"/>
-        <item
-            android:id="@+id/nav_sex"
-            android:icon="@drawable/ic_username"
-            android:title="性别"
-            />
-        <item
-            android:id="@+id/nav_space"
-            android:icon="@drawable/ic_space"
-            android:title="地址"/>
-        <item
-            android:id="@+id/nav_mood"
-            android:icon="@drawable/ic_sign"
-            android:title="心情"/>
+        <item android:title="个人信息">
+            <menu>
+                <item
+                    android:id="@+id/nav_account"
+                    android:icon="@drawable/ic_account"
+                    android:title="账号"
+                    android:checkable="false"/>
+                <item
+                    android:id="@+id/nav_sex"
+                    android:icon="@drawable/ic_username"
+                    android:title="性别"
+                    />
+                <item
+                    android:id="@+id/nav_space"
+                    android:icon="@drawable/ic_space"
+                    android:title="地址"/>
+                <item
+                    android:id="@+id/nav_mood"
+                    android:icon="@drawable/ic_sign"
+                    android:title="心情"/>
+            </menu>
+        </item>
+
     </group>
 </menu>

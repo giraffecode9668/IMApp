@@ -61,8 +61,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/nav_menu"
-        >
+        app:menu="@menu/nav_menu">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/AM_tv_exit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="退出登录" />
+
+
+        </RelativeLayout>
 
     </android.support.design.widget.NavigationView>
 

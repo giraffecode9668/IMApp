@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_sign" />
-                            <entry key="sourceFile" value="E:\broserdl\我要做的.svg" />
+                            <entry key="outputName" value="ic_out" />
+                            <entry key="sourceFile" value="E:\broserdl\退出.svg" />
                           </map>
                         </option>
                       </PersistentState>
