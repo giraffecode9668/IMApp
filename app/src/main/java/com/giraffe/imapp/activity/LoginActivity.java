@@ -18,6 +18,8 @@ import com.giraffe.imapp.pojo.User;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.listener.ConnectListener;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
@@ -45,7 +47,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (BmobUser.getCurrentUser(User.class)!=null){
             intent = new Intent(this,MainActivity.class);
             startActivity(intent);
+            connectBmobServ();
             finish();
+        }
+    }
+
+    private void connectBmobServ() {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user!=null) {
+            BmobIM.connect(user.getObjectId(), new ConnectListener() {
+                @Override
+                public void done(String uid, BmobException e) {
+                    if (e == null) {
+                        //连接成功
+                        Log.d("LoginActivity","connect成功");
+                    } else {
+                        //连接失败
+                        Toast.makeText(LoginActivity.this,
+                                "连接IM服务器失败",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -119,6 +141,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             intent = new Intent(LoginActivity.this,
                                     MainActivity.class);
                             startActivity(intent);
+                            connectBmobServ();
                             finish();
                             this.cancel();
                         }
@@ -132,16 +155,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (e.getErrorCode()==9015){
                         Toast.makeText(LoginActivity.this,"网络连接失败",Toast.LENGTH_SHORT).show();
                     }else if (e.getErrorCode()==101){
-
-//                        // 延迟作用，动画效果
-//                        Timer timer = new Timer();// 实例化Timer类
-//                        timer.schedule(new TimerTask() {
-//                            public void run() {
-//                                restartActivity(LoginActivity.this);
-//                                this.cancel();
-//                            }
-//                        }, 1500);// 这里百毫秒
-
                         Toast.makeText(LoginActivity.this,
                                 "密码或用户错误，请重新输入", Toast.LENGTH_SHORT).show();
                     }

@@ -15,6 +15,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * 显示联系人列表适配器
+ * */
 public class FriendsAdapter extends ArrayAdapter<User> {
     private int resourceId;
 
@@ -26,23 +29,28 @@ public class FriendsAdapter extends ArrayAdapter<User> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         User user = getItem(position);//获取当前项的User实例
-        View view;
+        View view;//子项视图
         ViewHolder viewHolder;
-        if (convertView == null){//如果缓存存在，使用缓存视图
+        if (convertView == null){//如果缓存不存在，创建视图
             view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
+
             viewHolder = new ViewHolder();
             viewHolder.civ_avatar = view.findViewById(R.id.friend_avatar);
             viewHolder.tv_nickname = view.findViewById(R.id.friend_nickname);
             view.setTag(viewHolder);
-        }else {
+
+        }else {//如果缓存存在，使用缓存视图
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
+
         }
-        if (user.getAvatar() != null){
+
+        if (user.getAvatar() != null){//显示头像
             Glide.with(getContext()).load(user.getAvatar().getUrl()).thumbnail(0.1f).
                     placeholder(R.mipmap.ic_launcher).dontAnimate().into(viewHolder.civ_avatar);
         }
-        if (user.getNickname()==null){
+
+        if (user.getNickname()==null){//显示用户昵称
             viewHolder.tv_nickname.setText("");
         }else {
             viewHolder.tv_nickname.setText(user.getNickname());
@@ -51,7 +59,8 @@ public class FriendsAdapter extends ArrayAdapter<User> {
         return view;
     }
 
-    class ViewHolder{
+
+    class ViewHolder{//使用ViewHolder和view.Tag的缓存减少加载时间
         CircleImageView civ_avatar;
         TextView tv_nickname;
     }

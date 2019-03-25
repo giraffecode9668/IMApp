@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.newim.BmobIM;
 import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
             @Override
             public void onClick(View v) {
                 BmobUser.logOut();
+                BmobIM.getInstance().disConnect();
                 intent = new Intent(MainActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -155,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.addfriend:
-                        Toast.makeText(MainActivity.this,
-                                "添加好友",Toast.LENGTH_LONG).show();
+                        intent = new Intent(MainActivity.this,AddFriendsActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.addcom:
                         Toast.makeText(MainActivity.this,

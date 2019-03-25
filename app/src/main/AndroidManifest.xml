@@ -51,9 +51,7 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask">
-
-        </activity>
+            android:launchMode="singleTask"></activity>
         <activity
             android:name=".activity.LoginActivity"
             android:launchMode="singleTask">
@@ -65,10 +63,8 @@
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.EditIfmActivity">
-
-        </activity>
+            android:launchMode="singleTop" />
+        <activity android:name=".activity.EditIfmActivity"></activity>
 
         <!-- bmobim start -->
         <receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver">
@@ -93,7 +89,7 @@
             android:name="Bmob_APP_KEY"
             android:value="38950169a9ad0b92f51e7e2537eeadb3" />
 
-
+        <activity android:name=".activity.AddFriendsActivity"></activity>
     </application>
 
 </manifest>
