@@ -28,61 +28,163 @@ import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class FriendsFragment extends Fragment {
 
-    private List<User> userList = new ArrayList<>();
+    View view;//Fragment视图
+    private List<User> userList = new ArrayList<>();//要显示的好友列表数据
+    PtrClassicFrameLayout ptrClassicFrameLayout;//下拉框
+    ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        initUser();
-        ListView listView = view.findViewById(R.id.FF_lv_friends);
-        FriendsAdapter adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
-        listView.setAdapter(adapter);
+        //加载页面
+        view = inflater.inflate(R.layout.fragment_friends, container, false);
+
+        //初始组件
+        ptrClassicFrameLayout = view.findViewById(R.id.FF_pcfl_update);
+        listView = view.findViewById(R.id.FF_lv_friends);
+
+        initListener();//行为动作
 
         return view;
     }
 
 
 
+    private void initListener() {
+        refreshList();//打开页面将自动刷新一次
+
+        //下拉刷新设置
+        ptrClassicFrameLayout.setLastUpdateTimeRelateObject(this);
+        ptrClassicFrameLayout.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                refreshList();//下拉手动刷新
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ptrClassicFrameLayout.refreshComplete();
+                    }
+                }, 1200);
+            }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+        });
+    }
+
+
+
+    /* **************** */
+    /* 更新ListView数据 */
+    /* **************** */
+    private void refreshList() {
+        initUser();//获得好友数据userList
+        ListSize listSize = new ListSize();
+        listSize.size = userList.size();
+
+        //如果查询得到的userList中好友数目和之前不一样，执行刷新，避免重复setAdapter
+        if (view.getTag()==null){
+            //根据userList和子项id创建适配器
+            FriendsAdapter adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
+
+            listView.setAdapter(adapter);//显示适配器内容
+            Log.d("refresh","执行了apdater1"+listView.getAdapter().toString());
+            view.setTag(listSize);
+
+        }else if(((ListSize) view.getTag()).size!=userList.size()){
+            FriendsAdapter adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
+            listView.setAdapter(adapter);//显示适配器内容
+            Log.d("refresh","执行了apdater2"+listView.getAdapter().toString());
+            view.setTag(listSize);
+
+        }else {
+            Log.d("refresh","执行了apdater3"+listView.getAdapter().toString());
+        }
+
+    }
+
+
+
+    /* **************** */
+    /* 获得userList数据 */
+    /* **************** */
     private void initUser() {
         BmobQuery<User> query = new BmobQuery<>();
 
-        User user = BmobUser.getCurrentUser(User.class);
-        query.addWhereRelatedTo("friends",new BmobPointer(user));
-        boolean isCache = query.hasCachedResult(User.class);
-        if(isNetworkConnected(getContext())){
-            query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        final User user = BmobUser.getCurrentUser(User.class);
+        query.addWhereRelatedTo("friends",new BmobPointer(user));//查询语句
+        boolean isCache = query.hasCachedResult(User.class);//本地是否存在缓存
+        if(isNetworkConnected(getContext())){//判断网络情况，有网络下
+            query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);//查询先缓存再网络
             query.setMaxCacheAge(TimeUnit.DAYS.toMillis(7));//此表示缓存7天
             Log.d("init","缓存7天");
-        }else {
-            if (isCache){
-                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+        }else {//在没有网络下
+            if (isCache){//本地存在缓存
+                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);//只查询本地缓存
                 Log.d("init","获得缓存查询");
-            }else {
+            }else {//本地没有缓存
                 Toast.makeText(getContext(),"本地存储过期，请连接网络",Toast.LENGTH_SHORT).show();
                 return;
             }
         }
-
+        //获取缓存或查询操作中的好友数据
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
                 if (e == null){
                     Log.d("init","查询个数："+list.size());
-                    for (User u:list){
-                        userList.add(u);
-                    }
+                    if (userList.isEmpty()){//userList为空，添加
+                        userList.addAll(list);
+                    }else if(!userList.equals(list)){//userList不等于存储，刷新
+                        userList.clear();
+                        userList.addAll(list);
+                    }//userList等于存储中的list，不更改
                 }else {
                     Log.d("init","失败"+e.getMessage());
                 }
             }
         });
-
     }
 
+
+
+    /* **************** */
+    /* 判断网络是否连接 */
+    /* **************** */
+    public boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+
+
+    /* ******************************************************* */
+    /* 缓存在view中的UserList的长度，用于判断是否再创建Apapter */
+    /* ******************************************************* */
+    class ListSize{
+        int size;
+    }
+
+
+
+    /* **************** */
+    /* 手动添加测试数据 */
+    /* **************** */
     private void addFriends(){
         if (BmobUser.getCurrentUser(User.class)!=null){
             User user1 = new User();
@@ -121,23 +223,7 @@ public class FriendsFragment extends Fragment {
 
                 }
             });
-
         }
-    }
-
-    /* **************** */
-    /* 判断网络是否连接 */
-    /* **************** */
-    public boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
     }
 
 }

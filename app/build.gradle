@@ -52,6 +52,9 @@ dependencies {
     implementation 'com.zhihu.android:matisse:0.5.2-beta3'
     //图片选器使用Glide加载工具
     implementation 'com.github.bumptech.glide:glide:3.7.0'
+
+    //android-Ultra-Pull-To-Refresh刷新工具
+    implementation 'in.srain.cube:ultra-ptr:1.0.11'
 }
 
 configurations.all {
