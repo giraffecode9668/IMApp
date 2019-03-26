@@ -123,7 +123,7 @@ public class FriendsFragment extends Fragment {
         query.addWhereRelatedTo("friends",new BmobPointer(user));//查询语句
         boolean isCache = query.hasCachedResult(User.class);//本地是否存在缓存
         if(isNetworkConnected(getContext())){//判断网络情况，有网络下
-            query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);//查询先缓存再网络
+            query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);//查询先缓存再网络
             query.setMaxCacheAge(TimeUnit.DAYS.toMillis(7));//此表示缓存7天
             Log.d("init","缓存7天");
         }else {//在没有网络下

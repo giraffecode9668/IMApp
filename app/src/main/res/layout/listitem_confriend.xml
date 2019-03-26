@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="54dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/confirmfriend_avatar"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="18dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="38dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/confirmfriend_avatar"
+        android:layout_marginLeft="12dp"
+        >
+
+        <TextView
+            android:id="@+id/confirmfriend_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未命名"
+            android:singleLine="true"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/confirmfriend_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:singleLine="true"
+            android:text="你好，很高兴认识你！"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <Button
+            android:id="@+id/confirmfriend_refuse"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="拒绝"/>
+
+        <Button
+            android:id="@+id/confirmfriend_pass"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="同意"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -91,7 +91,12 @@ public class AddFriendsActivity extends AppCompatActivity {
                     Log.d("init","个数："+list.size());
                     userList.addAll(list);
 
-                    //即时添加适配器
+                    if (userList.size()==0){//查询成功，因为不能模糊查询，所以获得一个用户
+                        User user = userList.get(0);
+
+                    }
+
+                    //及时添加适配器
                     AddFriendsAdapter addFriendsAdapter = new AddFriendsAdapter(
                             AddFriendsActivity.this,R.layout.listitem_addfriends,userList);
                     listView.setAdapter(addFriendsAdapter);

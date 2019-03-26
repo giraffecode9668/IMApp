@@ -164,6 +164,10 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
                         Toast.makeText(MainActivity.this,
                                 "添加群聊",Toast.LENGTH_LONG).show();
                         break;
+                    case R.id.confirmfriend:
+                        intent = new Intent(MainActivity.this,ConfirmFriendActivity.class);
+                        startActivity(intent);
+                        break;
                 }
                 return true;
             }

@@ -8,4 +8,8 @@
         android:id="@+id/addcom"
         android:title="添加群聊"
         android:icon="@drawable/ic_addcom"/>
+    <item
+        android:id="@+id/confirmfriend"
+        android:title="好友申请"
+        android:icon="@drawable/ic_addfriend"/>
 </menu>
