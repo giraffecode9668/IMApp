@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.giraffe.imapp.R;
 import com.giraffe.imapp.adapter.ConfirmFriendAdapter;
@@ -12,11 +13,15 @@ import com.giraffe.imapp.pojo.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+
+import static cn.bmob.newim.core.BmobIMClient.getContext;
+import static com.giraffe.imapp.url.IsConnected.isNetworkConnected;
 
 public class ConfirmFriendActivity extends AppCompatActivity {
 
@@ -50,7 +55,20 @@ public class ConfirmFriendActivity extends AppCompatActivity {
         query.order("-createdAt");
         query.include("sender");
 
-        //Todo 可以设置本地缓存，当没有网的时候可以查到历史记录
+        boolean isCache = query.hasCachedResult(ConFriend.class);//本地是否存在缓存
+        if(isNetworkConnected(getContext())){//判断网络情况，有网络下
+            query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);//查询先缓存再网络
+            query.setMaxCacheAge(TimeUnit.DAYS.toMillis(7));//此表示缓存7天
+            Log.d("init","缓存7天");
+        }else {//在没有网络下
+            if (isCache){//本地存在缓存
+                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);//只查询本地缓存
+                Log.d("init","获得缓存查询");
+            }else {//本地没有缓存
+                Toast.makeText(getContext(),"本地存储过期，请连接网络",Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
         query.findObjects(new FindListener<ConFriend>() {
             @Override
@@ -72,4 +90,7 @@ public class ConfirmFriendActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 }

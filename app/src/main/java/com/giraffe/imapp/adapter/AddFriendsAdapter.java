@@ -41,6 +41,7 @@ import cn.bmob.v3.listener.SaveListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
+import static com.giraffe.imapp.url.IsConnected.isNetworkConnected;
 
 /**
  * 添加好友适配器
@@ -177,22 +178,6 @@ public class AddFriendsAdapter extends ArrayAdapter<User> {
         CircleImageView avatar;
         TextView nickname;
         Button button;
-    }
-
-
-    /* **************** */
-    /* 判断网络是否连接 */
-    /* **************** */
-    public boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
     }
 
 

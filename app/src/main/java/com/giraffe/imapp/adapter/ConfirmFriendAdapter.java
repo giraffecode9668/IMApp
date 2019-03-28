@@ -10,21 +10,32 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.giraffe.imapp.R;
+import com.giraffe.imapp.pojo.AgreeAddFriendMessage;
 import com.giraffe.imapp.pojo.ConFriend;
 import com.giraffe.imapp.pojo.User;
 
 import java.util.List;
 import java.util.Queue;
 
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMMessage;
+import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.newim.core.BmobIMClient;
+import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import de.greenrobot.dao.query.Query;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static cn.bmob.v3.Bmob.getApplicationContext;
 
 public class ConfirmFriendAdapter extends ArrayAdapter<ConFriend> {
 
@@ -120,6 +131,9 @@ public class ConfirmFriendAdapter extends ArrayAdapter<ConFriend> {
                             btn_refuse.setVisibility(View.GONE);
                             Log.d("initUser","添加成功");
                             Log.d("cadapter","添加成功："+sender.getNickname());
+
+                            sendAgressMessage(sender);//发送同意添加好友
+
                         }else {
                             Log.d("initUser",e.getMessage());
                         }
@@ -156,6 +170,30 @@ public class ConfirmFriendAdapter extends ArrayAdapter<ConFriend> {
         }
 
         return view;
+    }
+
+
+    private void sendAgressMessage(User sender){
+        BmobIMUserInfo senderinfo = new BmobIMUserInfo(sender.getObjectId(),sender.getUsername(),
+                sender.getAvatar().getUrl());
+        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(senderinfo, true, null);
+        BmobIMConversation messageManager =
+                BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
+        AgreeAddFriendMessage msg = new AgreeAddFriendMessage();
+        msg.setContent("同意你的好友请求");
+        messageManager.sendMessage(msg, new MessageSendListener() {
+            @Override
+            public void done(BmobIMMessage bmobIMMessage, BmobException e) {
+                if (e==null){
+                    Log.d("agree","发送成功");
+                    Toast.makeText(getApplicationContext(),"发送同意好友请求成功",Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Log.d("agree","发送失败");
+                    Toast.makeText(getApplicationContext(),"发送同意好友请求失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 

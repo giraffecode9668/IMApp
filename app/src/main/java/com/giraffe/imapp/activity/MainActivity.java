@@ -61,6 +61,15 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
         initView();
         initUserIfm();
         initListener();
+        goEdit();
+    }
+
+    private void goEdit() {
+        if (BmobUser.getCurrentUser(User.class).getAvatar()==null||BmobUser.getCurrentUser(User.class).getNickname()==null){
+            Toast.makeText(this,"请先上传头像以及完善昵称，以免造成bug",Toast.LENGTH_SHORT).show();
+            intent = new Intent(this,EditIfmActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

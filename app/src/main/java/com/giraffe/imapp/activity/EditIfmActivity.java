@@ -140,54 +140,54 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                         if (isMood) user.setMood(et_mood.getText().toString());
 
                         if(isAvatar){
-                            //上传图片
+                                //上传图片
 //                            final BmobFile bmobFile = new BmobFile(new File(avatarPath));//创建上传的文件
-                            getFile(getBytes(avatarPath));
-                            final BmobFile bmobFile = new BmobFile(new File(s_avatarPath));//创建上传的文件
-                            bmobFile.uploadblock(new UploadFileListener() {//上传图片
+                                getFile(getBytes(avatarPath));
+                                final BmobFile bmobFile = new BmobFile(new File(s_avatarPath));//创建上传的文件
+                                bmobFile.uploadblock(new UploadFileListener() {//上传图片
 
-                                @Override
-                                public void done(BmobException e) {
-                                    if(e==null){
-                                        //bmobFile.getFileUrl()--返回的上传文件的完整地址
-                                        Log.d("上传文件成功" ,bmobFile.getFileUrl());
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if(e==null){
+                                            //bmobFile.getFileUrl()--返回的上传文件的完整地址
+                                            Log.d("上传文件成功" ,bmobFile.getFileUrl());
 
-                                        user.setAvatar(bmobFile);
-                                        user.update(new UpdateListener() {
-                                            @Override
-                                            public void done(BmobException e) {
-                                                if (e==null){
-                                                    Log.d("图更新",
-                                                            "更新图片以及修改信息到表格");
-                                                    Toast.makeText(EditIfmActivity.this,
-                                                            "更新成功",Toast.LENGTH_SHORT).show();
-                                                    goBackMain();
+                                            user.setAvatar(bmobFile);
+                                            user.update(new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e==null){
+                                                        Log.d("图更新",
+                                                                "更新图片以及修改信息到表格");
+                                                        Toast.makeText(EditIfmActivity.this,
+                                                                "更新成功",Toast.LENGTH_SHORT).show();
+                                                        goBackMain();
 
-                                                }else {
-                                                    Log.d("图更新",
-                                                            "错误："+e.getMessage());
-                                                    Toast.makeText(EditIfmActivity.this,
-                                                            "更新失败",Toast.LENGTH_SHORT).show();
-                                                    goBackMain();
+                                                    }else {
+                                                        Log.d("图更新",
+                                                                "错误："+e.getMessage());
+                                                        Toast.makeText(EditIfmActivity.this,
+                                                                "更新失败",Toast.LENGTH_SHORT).show();
+                                                        goBackMain();
 
+                                                    }
                                                 }
-                                            }
-                                        });
-                                        isAvatar = false;
-                                    }else{
-                                        Log.d("上传文件失败：" , e.getMessage());
-                                        Toast.makeText(EditIfmActivity.this,
-                                                "上传图片失败",Toast.LENGTH_SHORT).show();
+                                            });
+                                            isAvatar = false;
+                                        }else{
+                                            Log.d("上传文件失败：" , e.getMessage());
+                                            Toast.makeText(EditIfmActivity.this,
+                                                    "上传图片失败",Toast.LENGTH_SHORT).show();
 
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onProgress(Integer value) {
-                                    // 返回的上传进度（百分比）
-                                }
-                            });
-                        }else if(isNickName||isSex||isSpace||isSign||isMood) {
+                                    @Override
+                                    public void onProgress(Integer value) {
+                                        // 返回的上传进度（百分比）
+                                    }
+                                });
+                            }else if(isNickName||isSex||isSpace||isSign||isMood) {
                                 user.update(new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
@@ -213,12 +213,12 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                                 isSpace = false;
                                 isSign = false;
                                 isMood = false;
-                        }else {
-                            Toast.makeText(EditIfmActivity.this,
-                                    "无更改",Toast.LENGTH_SHORT).show();
-                            goBackMain();
+                            }else {
+                                Toast.makeText(EditIfmActivity.this,
+                                        "无更改",Toast.LENGTH_SHORT).show();
+                                goBackMain();
 
-                        }
+                            }
                         BmobUser.fetchUserInfo(new FetchUserInfoListener<BmobUser>() {//更新用户缓存信息
                             @Override
                             public void done(BmobUser user, BmobException e) {
@@ -462,7 +462,11 @@ public class EditIfmActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         }
                     }
+                    break;
+
                 }
+
+
         }
 
 

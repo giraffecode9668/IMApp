@@ -32,6 +32,8 @@ import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
+import static com.giraffe.imapp.url.IsConnected.isNetworkConnected;
+
 public class FriendsFragment extends Fragment {
 
     View view;//Fragment视图
@@ -152,23 +154,6 @@ public class FriendsFragment extends Fragment {
                 }
             }
         });
-    }
-
-
-
-    /* **************** */
-    /* 判断网络是否连接 */
-    /* **************** */
-    public boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
     }
 
 

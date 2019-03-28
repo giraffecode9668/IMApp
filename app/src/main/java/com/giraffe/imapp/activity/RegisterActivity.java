@@ -58,9 +58,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if(account.getText().toString().equals("")||password.getText().toString().equals("")){
                     Toast.makeText(RegisterActivity.this,"请完善账号密码",Toast.LENGTH_SHORT).show();
                 }else {
-                    intent = new Intent(this,LoginActivity.class);
                     signUp(v);
-                    startActivity(intent);
+
                 }
                 break;
         }
@@ -82,9 +81,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (e == null) {
                     Toast.makeText(RegisterActivity.this, "注册成功",
                             Toast.LENGTH_SHORT).show();
+                    intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                    startActivity(intent);
 
                 } else {
-                    Toast.makeText(RegisterActivity.this, "注册失败",
+                    Toast.makeText(RegisterActivity.this, "注册失败,该账号已存在",
                             Toast.LENGTH_SHORT).show();
 
                     System.out.print(e.getStackTrace()+"e.getErrorCode()："+e.getErrorCode());

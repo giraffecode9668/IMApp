@@ -40,8 +40,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         isLogined();
         initView();
         initListener();
-
     }
+
+
 
     private void isLogined() {
         if (BmobUser.getCurrentUser(User.class)!=null){
