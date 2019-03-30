@@ -20,6 +20,11 @@ public class User extends BmobUser {
 
     public User(){}
 
+    public User(String username,String nickname){
+        this.setUsername(username);
+        this.nickname = nickname;
+    }
+
     public String getNickname() {
         return nickname;
     }

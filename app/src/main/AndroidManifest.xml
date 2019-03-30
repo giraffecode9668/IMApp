@@ -67,6 +67,9 @@
         <activity android:name=".activity.EditIfmActivity"/>
         <activity android:name=".activity.AddFriendsActivity"/>
         <activity android:name=".activity.ConfirmFriendActivity"/>
+        <activity android:name=".activity.ShowIfmActivity"/>
+        <activity android:name=".activity.SessionActivity"/>
+
 
         <!-- bmobim start -->
         <receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver">

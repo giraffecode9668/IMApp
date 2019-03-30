@@ -1,6 +1,7 @@
 package com.giraffe.imapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.giraffe.imapp.R;
+import com.giraffe.imapp.activity.ShowIfmActivity;
 import com.giraffe.imapp.adapter.FriendsAdapter;
 import com.giraffe.imapp.pojo.User;
 
@@ -34,12 +37,13 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 
 import static com.giraffe.imapp.url.IsConnected.isNetworkConnected;
 
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment  implements AdapterView.OnItemClickListener {
 
     View view;//Fragment视图
     private List<User> userList = new ArrayList<>();//要显示的好友列表数据
     PtrClassicFrameLayout ptrClassicFrameLayout;//下拉框
     ListView listView;
+    FriendsAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +84,25 @@ public class FriendsFragment extends Fragment {
                 return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
             }
         });
+
+        listView.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+        Toast.makeText(getContext(),"点击了："+userList.get(position).getNickname(),Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(),ShowIfmActivity.class);
+        User cuser = userList.get(position);
+        Bundle data = new Bundle();
+        data.putString("username",cuser.getUsername());
+        data.putString("nickname",cuser.getNickname());
+        data.putString("sign",cuser.getSign());
+        data.putString("avatar",cuser.getAvatar().getUrl());
+        data.putString("sex",cuser.getSex());
+        data.putString("space",cuser.getSpace());
+
+        intent.putExtra("data",data);
+        startActivity(intent);
     }
 
 
@@ -95,14 +118,14 @@ public class FriendsFragment extends Fragment {
         //如果查询得到的userList中好友数目和之前不一样，执行刷新，避免重复setAdapter
         if (view.getTag()==null){
             //根据userList和子项id创建适配器
-            FriendsAdapter adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
+            adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
 
             listView.setAdapter(adapter);//显示适配器内容
             Log.d("refresh","执行了apdater1"+listView.getAdapter().toString());
             view.setTag(listSize);
 
         }else if(((ListSize) view.getTag()).size!=userList.size()){
-            FriendsAdapter adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
+            adapter = new FriendsAdapter(getContext(),R.layout.listitem_friends,userList);
             listView.setAdapter(adapter);//显示适配器内容
             Log.d("refresh","执行了apdater2"+listView.getAdapter().toString());
             view.setTag(listSize);
