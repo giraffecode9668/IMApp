@@ -94,6 +94,7 @@ public class FriendsFragment extends Fragment  implements AdapterView.OnItemClic
         Intent intent = new Intent(getContext(),ShowIfmActivity.class);
         User cuser = userList.get(position);
         Bundle data = new Bundle();
+        data.putString("userid",cuser.getObjectId());
         data.putString("username",cuser.getUsername());
         data.putString("nickname",cuser.getNickname());
         data.putString("sign",cuser.getSign());

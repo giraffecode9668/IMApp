@@ -61,6 +61,7 @@ public class IMMessageHandler extends BmobIMMessageHandler {
 
 
         }
+        Log.d("IMtest","有在线消息"+msg.getContent());
     }
 
     @Override
@@ -100,6 +101,7 @@ public class IMMessageHandler extends BmobIMMessageHandler {
                         }
                     });
                 }
+                Log.d("IMtest","有离线消息"+message.getContent());
             }
         }
     }

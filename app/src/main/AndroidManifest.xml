@@ -68,7 +68,7 @@
         <activity android:name=".activity.AddFriendsActivity"/>
         <activity android:name=".activity.ConfirmFriendActivity"/>
         <activity android:name=".activity.ShowIfmActivity"/>
-        <activity android:name=".activity.SessionActivity"/>
+        <activity android:name=".activity.ChatActivity"/>
 
 
         <!-- bmobim start -->

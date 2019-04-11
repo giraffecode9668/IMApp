@@ -44,6 +44,8 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
         this.messageList = messageList;
     }
 
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_msg,parent,false);
@@ -59,13 +61,13 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
             holder.leftLayout.setVisibility(View.VISIBLE);
             holder.rightLayout.setVisibility(View.GONE);
             holder.leftText.setText(msg.getContent());
-            Glide.with(context).load(msg.getReceiver().getAvatar().getUrl()).thumbnail(0.1f).dontAnimate().into(holder.leftAvatar);
+            Glide.with(context).load(msg.getReceiver()).thumbnail(0.1f).dontAnimate().into(holder.leftAvatar);
         }else if(msg.getType() == Msg.TYPE_SEND){
             //如果是发送的消息，则显示右边的消息布局，将左边的消息布局隐藏
             holder.rightLayout.setVisibility(View.VISIBLE);
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightText.setText(msg.getContent());
-            Glide.with(context).load(msg.getSender().getAvatar().getUrl()).thumbnail(0.1f).dontAnimate().into(holder.rightAvatar);
+            Glide.with(context).load(msg.getSender()).thumbnail(0.1f).dontAnimate().into(holder.rightAvatar);
         }
     }
 

@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.giraffe.imapp.R;
-import com.giraffe.imapp.fragment.ChatsFragment;
+import com.giraffe.imapp.fragment.SessionFragment;
 import com.giraffe.imapp.fragment.CommunityFragment;
 import com.giraffe.imapp.fragment.FriendsFragment;
 import com.giraffe.imapp.fragment.SettingFragment;
@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
     /* **************** */
     private void setupViewPager(ViewPager viewPager) {
         list = new ArrayList<>();
-        list.add(new ChatsFragment());
+        list.add(new SessionFragment());
         list.add(new FriendsFragment());
         list.add(new CommunityFragment());
         list.add(new SettingFragment());

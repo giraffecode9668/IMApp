@@ -4,15 +4,15 @@ public class Msg {
     public static final int TYPE_RECEIVED = 0;
     public static final int TYPE_SEND = 1;
 
-    private String content;
+    private String content,ravatar,savatar;
     private  int type;
-    private User receiver,sender;
 
-    public Msg(String content,int type,User ruser,User suser){
+
+    public Msg(String content,int type,String ravatar,String savatar){
         this.content = content;
         this.type = type;
-        this.receiver = ruser;
-        this.sender = suser;
+        this.ravatar = ravatar;
+        this.savatar = savatar;
     }
 
     public String getContent() {
@@ -23,12 +23,12 @@ public class Msg {
         return type;
     }
 
-    public User getReceiver() {
-        return receiver;
+    public String getReceiver() {
+        return ravatar;
     }
 
-    public User getSender() {
-        return sender;
+    public String getSender() {
+        return savatar;
     }
 
 }
