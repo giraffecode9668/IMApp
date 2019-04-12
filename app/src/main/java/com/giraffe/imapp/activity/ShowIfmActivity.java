@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.giraffe.imapp.R;
+import com.giraffe.imapp.url.IsConnected;
 
 
 import cn.bmob.newim.BmobIM;
@@ -48,10 +49,16 @@ public class ShowIfmActivity extends AppCompatActivity {
         opens.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //创建用户信息
-                BmobIMUserInfo info = new BmobIMUserInfo(uid, nickname, avatar);
-                //根据当前用户信息创建常态会话接口
-                BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                BmobIMConversation conversationEntrance;
+                if (IsConnected.isNetworkConnected(getApplicationContext())){
+                    //创建用户信息
+                    BmobIMUserInfo info = new BmobIMUserInfo(uid, nickname, avatar);
+                    //根据当前用户信息创建常态会话接口
+                    conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                }else {
+                    conversationEntrance = new BmobIMConversation();
+                }
+
 
                 //跳转至谈话窗
                 Intent intent = new Intent(ShowIfmActivity.this,ChatActivity.class);

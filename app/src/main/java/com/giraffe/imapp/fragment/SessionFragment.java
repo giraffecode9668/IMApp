@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.giraffe.imapp.R;
 import com.giraffe.imapp.activity.ChatActivity;
 import com.giraffe.imapp.adapter.SessionAdapter;
+import com.giraffe.imapp.base.BaseFragment;
 import com.giraffe.imapp.pojo.Conversation;
 import com.giraffe.imapp.pojo.User;
 
@@ -32,7 +33,7 @@ import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
-public class SessionFragment extends Fragment {
+public class SessionFragment extends BaseFragment {
 
     View view;
     PtrClassicFrameLayout ptrClassicFrameLayout;
