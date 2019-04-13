@@ -1,5 +1,6 @@
 package com.giraffe.imapp.activity;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -110,6 +111,9 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
         savater = suser.getAvatar().getFileUrl();
 
         title.setText(nickname);
+
+        NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        manager.cancel(1);
 
         initMsgs();//打开界面获取聊天记录
     }
@@ -253,7 +257,8 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
                 message.what = 0x123;
                 message.obj = msg;
                 handler.sendMessage(message);
-
+                NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                manager.cancel(1);
             }else {
 
             }

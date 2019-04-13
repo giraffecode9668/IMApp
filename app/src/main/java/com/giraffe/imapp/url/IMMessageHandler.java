@@ -1,8 +1,20 @@
 package com.giraffe.imapp.url;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.giraffe.imapp.R;
+import com.giraffe.imapp.activity.ChatActivity;
 import com.giraffe.imapp.activity.LoginActivity;
 import com.giraffe.imapp.activity.MainActivity;
 import com.giraffe.imapp.pojo.User;
@@ -28,7 +40,7 @@ public class IMMessageHandler extends BmobIMMessageHandler {
 
 
     BmobIMConversation conversation;
-
+    int number = 0;
     @Override
     public void onMessageReceive(final MessageEvent event) {
         super.onMessageReceive(event);
@@ -61,6 +73,44 @@ public class IMMessageHandler extends BmobIMMessageHandler {
 
 
         }
+        NotificationManager manager = (NotificationManager)
+                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        Context context = getApplicationContext();
+        Notification notification = null;
+        String id = "my_channel_01";
+        String name="我是渠道名字";
+        Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+        BmobIMConversation bmobIMConversation = msg.getBmobIMConversation();
+        Log.d("IMMessage",bmobIMConversation.toString());
+        Log.d("IMMessage",bmobIMConversation.getConversationTitle());
+        Log.d("IMMessage",bmobIMConversation.getConversationIcon());
+
+        intent.putExtra("c",bmobIMConversation);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pi = PendingIntent.getActivity(getApplicationContext(),0,intent,0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH);
+            manager.createNotificationChannel(mChannel);
+            notification = new Notification.Builder(context)
+                    .setChannelId(id)
+                    .setContentTitle(bmobIMConversation.getConversationTitle())
+                    .setContentText(msg.getContent())
+                    .setContentIntent(pi)
+                    .setSmallIcon(R.mipmap.ic_launcher).build();
+        } else {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                    .setContentTitle(bmobIMConversation.getConversationTitle())
+                    .setContentText(msg.getContent())
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentIntent(pi)
+                    .setOngoing(true);
+            notification = notificationBuilder.build();
+        }
+
+
+        manager.notify(1,notification);
+
         Log.d("IMtest","有在线消息"+msg.getContent());
     }
 

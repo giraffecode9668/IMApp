@@ -59,7 +59,6 @@ public class ShowIfmActivity extends AppCompatActivity {
                     conversationEntrance = new BmobIMConversation();
                 }
 
-
                 //跳转至谈话窗
                 Intent intent = new Intent(ShowIfmActivity.this,ChatActivity.class);
                 intent.putExtra("data",data);//将data数据传入
